@@ -62,6 +62,47 @@ Then connect to the board like so:
     > help
     ...
 
+Button press example
+--------------------
+
+The board has two buttons - one called **EN**, that causes the board to do a hard reset, and the other called **BOOT**, that causes the board to enter a firmware download if held down while you press the EN button.
+
+The BOOT button only has special behavior when used in combination with EN. When the board is running, it's just a normal button connected to GPIO pin 0. So you can use it for a simple MicroPython example program.
+
+So assuming `rshell` is started, just use the `repl` command to access the MicroPython REPL:
+
+    > repl
+    Entering REPL. Use Control-X to exit.
+    >>>
+
+The REPL supports auto-ident - this works well when you're entering code by hand but when you try to paste in code that's already correctly indented, the auto-indent will cause the pasted code to be over indented. So to paste in code, you first need to enter paste mode by pressing `ctrl-E`. When you do this you'll see:
+
+    paste mode; Ctrl-C to cancel, Ctrl-D to finish
+    ===
+
+Note: enter `help()` (when in normal mode) for a reminder of the various key bindings like `ctrl-E`.
+
+Now you can copy and paste in the following code and then press `ctrl-D`, the code will start to run immediately:
+
+```
+button = machine.Pin(0, machine.Pin.IN, machine.Pin.PULL_UP)
+prev = True
+while True:
+    now = button.value()
+    if now != prev:
+        print('Button', 'released' if now else 'pressed')
+        prev = now
+```
+
+Press the BOOT button and the code will print `Button pressed` (and `Button released` when you release the button).
+
+Notes:
+
+* The button value is `False` when the button is pressed, which is maybe the opposite to what you'd expect.
+* The code may print more often than you'd expect due to a phenomenon called [bounce](https://learn.adafruit.com/make-it-switch/debouncing) (though if you look at the [board schematic](https://dl.espressif.com/dl/schematics/esp32_devkitc_v4-sch.pdf), you'll see that the buttons have 0.1&micro;F capicitors in parallel which is a cheap mechanism for reducing bounce).
+
+You can press `ctrl-C` to interrupt the running code and return to the MicroPython REPL prompt. And then press `ctrl-X` to return to the `rshell` prompt.
+
 Example circuit
 ---------------
 
@@ -97,7 +138,3 @@ Let's copy it to the board and then connect to the MicroPython REPL:
     > repl
 
 If you now press the EN button on the board, you'll see it do a hard reset and start the program - the LED should blink on and off every 200ms.
-
-Press `ctrl-C` to stop the program and return to the MicroPython REPL.
-
-Press `ctrl-X` to return to the `rshell` prompt.
