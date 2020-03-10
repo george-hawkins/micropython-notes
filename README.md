@@ -38,20 +38,20 @@ The one ending in `v1.12.bin` is the latest stable build, while the one ending i
 
 Note: the plain GENERIC firmwares are for boards that just have the WROOM module while the GENERIC-SPIRAM firmwares are for boards that have the WROVER module with the addition 4MiB of SRAM.
 
-Once you've downloaded the firmware, you need to write it to the board:
+Once you've downloaded the firmware, connect you board via USB and determine the serial device that corresponds to your board, typically this is `/dev/cu.SLAB_USBtoUART` on Mac and `/dev/ttyUSB0` on Linux.
+
+Note: on Mac you will probably have to install a device driver for the CP2104 USB-to-UART bridge controller that the board uses. You can find the relevant driver on the [SiLabs CP2104 driver page](http://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers).
+
+Now you can write the firmware to the board:
 
     $ FIRMWARE=~/Downloads/esp32spiram-idf4-20191220-v1.12.bin
     $ PORT=/dev/cp2104
     $ esptool.py --port $PORT erase_flash
     $ esptool.py --port $PORT write_flash -z 0x1000 $FIRMWARE
 
-Install [`rshell`](https://github.com/dhylands/rshell) so you can interact with MicroPython:
+Once that's done, install [`rshell`](https://github.com/dhylands/rshell) so you can interact with MicroPython:
 
     $ pip install rshell
-
-Connect you board via USB and determine the serial device that corresponds to your board, typically this is `/dev/cu.SLAB_USBtoUART` on Mac and `/dev/ttyUSB0` on Linux.
-
-Note: on Mac you will probably have to install a device driver for the CP2104 USB-to-UART bridge controller that the board uses. You can find the relevant driver on the [SiLabs CP2104 driver page](http://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers).
 
 Then connect to the board like so:
 
@@ -137,7 +137,7 @@ The circuit consists of:
 * A standard **5mm 20mA red LED** - its long leg (the positive anode) is on the top side of the central divide of the breadboard and is connected to pin 13 of the DevKit board, while its short leg (the negative cathode) is on the other side of the divide.
 * A **220&ohm; resister** - its legs are inserted such that one is connected with the cathode of the LED and the other to the GND pin of the DevKit board.
 
-Note: 220&ohm; is actually way higher than needed but its a common resistor type and will keep the current well below the safe level for the pins on the board.
+Note: 220&ohm; is actually way higher than needed but it's a common resistor type and will keep the current well below the safe level for the pins on the board.
 
 Now lets create a simple program that flashes the LED on and off:
 
