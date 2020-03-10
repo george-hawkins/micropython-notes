@@ -1,9 +1,7 @@
 Setting up MicroPython on the ESP32 DevKitC VB
 ==============================================
 
-Most ESP32 development boards feature the basic WROOM module, which has 4MiB of flash but just 520KiB of SRAM - which can be a little tight when running more substantial MicroPython programs.
-
-An alternative to WROOM is the WROVER module that has an additional 4MiB of SRAM (to be technically correct, it's actually pSRAM).
+Most ESP32 development boards feature the basic WROOM module, which has 4MiB of flash but just 520KiB of SRAM - which can be a little tight when running more substantial MicroPython programs. However, an alternative to the WROOM module is the WROVER module which has an extra 4MiB of SRAM.
 
 Espressif produce a board, featuring this module, that's called the ESP32 DevKitC **VB** and is available from:
 
@@ -102,6 +100,30 @@ Notes:
 * The code may print more often than you'd expect due to a phenomenon called [bounce](https://learn.adafruit.com/make-it-switch/debouncing) (though if you look at the [board schematic](https://dl.espressif.com/dl/schematics/esp32_devkitc_v4-sch.pdf), you'll see that the buttons have 0.1&micro;F capicitors in parallel which is a cheap mechanism for reducing bounce).
 
 You can press `ctrl-C` to interrupt the running code and return to the MicroPython REPL prompt. And then press `ctrl-X` to return to the `rshell` prompt.
+
+Checking memory usage
+---------------------
+
+Now that you know how to access the MicroPython REPL, you can check out the memory usage like so:
+
+```
+>>> import micropython
+>>> micropython.mem_info()
+stack: 720 out of 15360
+GC: total: 4098240, used: 4768, free: 4093472
+ No. of 1-blocks: 14, 2-blocks: 7, max blk sz: 264, max free sz: 255829
+```
+
+If you did the same thing on a board with a WROOM module you'd see output something like this:
+
+```
+stack: 736 out of 15360
+GC: total: 111168, used: 4768, free: 106400
+ No. of 1-blocks: 14, 2-blocks: 7, max blk sz: 264, max free sz: 6637
+```
+
+You can see that with a WROOM module, the Python [garbage collector](https://en.wikipedia.org/wiki/Garbage_collection_(computer_science)) (GC) has considerably less space to work with.
+
 
 Example circuit
 ---------------
