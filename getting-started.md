@@ -8,14 +8,16 @@ Installing MicroPython
 
 The following is just a condensed form of the MicroPython ESP32 [introduction](https://docs.micropython.org/en/latest/esp32/tutorial/intro.html).
 
-Go to the MicroPython [ESP32 firmware downloads](https://micropython.org/download#esp32) and select the GENERIC firmware for ESP-IDF v4.x, i.e. the ESP32 firmware for boards, like the HUZZAH32, that have no external SPI RAM, and which have been setup (as above) with ESP-IDF 4.x.
+Go to the MicroPython [ESP32 firmware downloads](https://micropython.org/download/esp32) and select the GENERIC firmware for ESP-IDF v4.x, i.e. the ESP32 firmware for boards, like the HUZZAH32, that have no external SPI RAM, and which have been setup (as above) with ESP-IDF 4.x.
 
 **Important:** I initially used the GENERIC-SPIRAM firmware, which is intended for boards that 4MB of external pSRAM. The Adafruit [product page](https://www.adafruit.com/product/3405) notes that the board has "4 MB of SPI Flash", however pSRAM is something different (as explained [here](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/external-ram.html#hardware)). If you use the GENERIC-SPIRAM, it still works fine but you see these errors in the boot sequence:
 
     E (593) spiram: SPI RAM enabled but initialization failed. Bailing out.
     E (10) spiram: SPI RAM not initialized
 
-I chose the latest non-nightly (nightlies have the same name as the latest stable release but with something like `-167-gf020eac6a` tagged on, the `gf020eac6a` doesn't seem to be a Git hash, perhaps it's some CI generated build number).
+I chose the latest non-nightly. Nightlies have the same name as the latest stable release but with `unstable` before the version and something like `-167-gf020eac6a` after (the bit after the `-g`, i.e. `f020eac6a` in the example just given, is the git hash of the revison that was built).
+
+Note: ESP32 MicroPython versions are built on top of the Espressif IoT Development Framework (ESP-IDF), if you're interested in knowing more about the ESP-IDF, see my notes [here](https://github.com/george-hawkins/snippets/blob/master/esp-idf.md).
 
 Now we're almost ready to plug in the board but before we can do that it may be necessary to install a driver for the board's USB to UART bridge - see [here](https://github.com/george-hawkins/snippets/blob/master/esp-usb-to-uart.md) for more details.
 
@@ -39,7 +41,7 @@ Once uploaded you can connect to the MicroPython REPL:
 
     $ screen $PORT 115200
 
-Note: `screen` behaves differently on Mac and Linux. On Mac quiting requires pressing `ctrl-a` an then `ctrl-\`, while on Linux it requires `ctrl-a` and then just `\`.
+Note: `screen` behaves differently on Mac and Linux. On Mac quiting requires pressing `ctrl-a` and then `ctrl-\`, while on Linux it requires `ctrl-a` and then just `\`.
 
 Just press return to get a prompt and then:
 

@@ -27,16 +27,19 @@ Install the Espressif [`esptool`](https://github.com/espressif/esptool):
 
     $ pip install esptool
 
-Go to the ESP32 section of the MicroPython [download page](https://micropython.org/download), if there are firmwares listed for multiple ESP-IDF then go to the section for the latest version (4.x at the time of writing) and then chose the GENERIC-SPIRAM firmare in this section for the latest MicroPython version (1.12 at the time of writing).
+Go to the MicroPython [ESP32 firmware downloads](https://micropython.org/download/esp32/), if there are firmwares listed for multiple ESP-IDF versions then go to the section for the latest version (4.x at the time of writing) and then chose the GENERIC-SPIRAM firmare in this section for the latest MicroPython version (1.12 at the time of writing).
 
-There are typically two versions, e.g.:
+There are two kinds of versions, e.g.:
 
-* GENERIC-SPIRAM : esp32spiram-idf4-20200309-v1.12-213-g8db5d2d1f.bin
+* GENERIC-SPIRAM : esp32spiram-idf3-20200517-unstable-v1.12-464-gcae77daf0.bin
 * GENERIC-SPIRAM : esp32spiram-idf4-20191220-v1.12.bin
 
-The one ending in `v1.12.bin` is the latest stable build, while the one ending in `v1.12-213-g8db5d2d1f.bin` is the latest nightly build and includes commits made since the last stable release. Usually it's best to go with the stable build.
+The one ending in `v1.12.bin` is the latest stable build, while the one ending in `v1.12-464-gcae77daf0.bin` is a nightly build and includes commits made since the last stable release. Usually it's best to go with the stable build.
 
-Note: the plain GENERIC firmwares are for boards that just have the WROOM module while the GENERIC-SPIRAM firmwares are for boards that have the WROVER module with the addition 4MiB of SRAM.
+Notes:
+
+* The plain GENERIC firmwares are for boards that just have the WROOM module while the GENERIC-SPIRAM firmwares are for boards that have the WROVER module with the addition 4MiB of SRAM.
+* ESP32 MicroPython versions are built on top of the Espressif IoT Development Framework (ESP-IDF), if you're interested in knowing more about the ESP-IDF, see my notes [here](https://github.com/george-hawkins/snippets/blob/master/esp-idf.md).
 
 Once you've downloaded the firmware, connect you board via USB and determine the serial device that corresponds to your board, typically this is `/dev/cu.SLAB_USBtoUART` on Mac and `/dev/ttyUSB0` on Linux.
 
@@ -45,7 +48,7 @@ Note: on Mac you will probably have to install a device driver for the CP2104 US
 Now you can write the firmware to the board:
 
     $ FIRMWARE=~/Downloads/esp32spiram-idf4-20191220-v1.12.bin
-    $ PORT=/dev/cp2104
+    $ PORT=/dev/ttyUSB0
     $ esptool.py --port $PORT erase_flash
     $ esptool.py --port $PORT write_flash -z 0x1000 $FIRMWARE
 
@@ -56,14 +59,14 @@ Once that's done, install [`rshell`](https://github.com/dhylands/rshell) so you 
 Then connect to the board like so:
 
     $ PORT=/dev/ttyUSB0
-    $ rshell -p $PORT --buffer-size 512 --quiet
+    $ rshell --buffer-size 512 --quiet -p $PORT
     > help
     ...
 
 Button press example
 --------------------
 
-The board has two buttons - one called **EN**, that causes the board to do a hard reset, and the other called **BOOT**, that causes the board to enter a firmware download if held down while you press the EN button.
+The board has two buttons - one called **EN**, that causes the board to do a hard reset, and the other called **BOOT**, that causes the board to enter a firmware download mode if held down while you press the EN button.
 
 The BOOT button only has special behavior when used in combination with EN. When the board is running, it's just a normal button connected to GPIO pin 0. So you can use it for a simple MicroPython example program.
 
@@ -155,7 +158,7 @@ Now lets create a simple program that flashes the LED on and off:
 
 Let's copy it to the board and then connect to the MicroPython REPL:
 
-    $ rshell -p $PORT --buffer-size 512 --quiet
+    $ rshell --buffer-size 512 --quiet -p $PORT
     > cp main.py /pyboard
     > repl
 
