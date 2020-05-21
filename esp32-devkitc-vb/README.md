@@ -17,6 +17,8 @@ Note: I wrote this page once I'd gotten used to MicroPython. I also wrote a simi
 Setup
 -----
 
+If you haven't already got Python 3 installed on your local system, see my [notes](https://github.com/george-hawkins/snippets/blob/master/install-python.md) on installing it.
+
 Create a new directory for your project, then create and set up a standard Python venv:
 
     $ mkdir esp32-devkitc-vb
