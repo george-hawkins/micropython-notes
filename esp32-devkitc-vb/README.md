@@ -12,6 +12,8 @@ Note: the Banggood price includes shipping while the Mouser price does not (thou
 
 The following short guide covers getting MicroPython set up on the board and using it to blink an LED on and off as a simple example.
 
+Note: I wrote this page once I'd gotten used to MicroPython. I also wrote a similar [page](../getting-started.md) when installing MicroPython for the first time (on an [Adafruit HUZZAH32 board](https://www.adafruit.com/product/3405) that just has a WROVER module). That page covers most of the same details but includes more notes, so it may be more helpful if you find anything here unclear.
+
 Setup
 -----
 
@@ -22,6 +24,8 @@ Create a new directory for your project, then create and set up a standard Pytho
     $ python3 -m venv env
     $ source env/bin/activate
     $ pip install --upgrade pip
+
+Note: you just need to repeat the `source` step, whenever you open a new terminal session, in order to activate the venv.
 
 Install the Espressif [`esptool`](https://github.com/espressif/esptool):
 
@@ -34,7 +38,7 @@ There are two kinds of versions, e.g.:
 * GENERIC-SPIRAM : esp32spiram-idf3-20200517-unstable-v1.12-464-gcae77daf0.bin
 * GENERIC-SPIRAM : esp32spiram-idf4-20191220-v1.12.bin
 
-The one ending in `v1.12.bin` is the latest stable build, while the one ending in `v1.12-464-gcae77daf0.bin` is a nightly build and includes commits made since the last stable release. Usually it's best to go with the stable build.
+The one ending in `v1.12.bin` is the latest stable build, while the one ending in `v1.12-464-gcae77daf0.bin` is a nightly build and includes commits made since the last stable release (the bit after the `-g` is the hash of the revision that was built). Usually it's best to go with the latest _stable_ build.
 
 Notes:
 
@@ -43,7 +47,7 @@ Notes:
 
 Once you've downloaded the firmware, connect you board via USB and determine the serial device that corresponds to your board, typically this is `/dev/cu.SLAB_USBtoUART` on Mac and `/dev/ttyUSB0` on Linux.
 
-Note: on Mac you will probably have to install a device driver for the CP2104 USB-to-UART bridge controller that the board uses. You can find the relevant driver on the [SiLabs CP2104 driver page](http://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers).
+Note: on Mac you will probably have to install a device driver for the CP2104 USB-to-UART bridge controller that the board uses - see [here](https://github.com/george-hawkins/snippets/blob/master/esp-usb-to-uart.md) for more details.
 
 Now you can write the firmware to the board:
 
@@ -52,16 +56,19 @@ Now you can write the firmware to the board:
     $ esptool.py --port $PORT erase_flash
     $ esptool.py --port $PORT write_flash -z 0x1000 $FIRMWARE
 
+Adjust `FIRMWARE` and `PORT` to match the name of the firmware you downloaded and the port for your system.
+
 Once that's done, install [`rshell`](https://github.com/dhylands/rshell) so you can interact with MicroPython:
 
     $ pip install rshell
 
 Then connect to the board like so:
 
-    $ PORT=/dev/ttyUSB0
     $ rshell --buffer-size 512 --quiet -p $PORT
     > help
     ...
+
+For more on tools like `rshell` see [here](../tools-filesystem-and-repl.md).
 
 Button press example
 --------------------
@@ -81,11 +88,12 @@ The REPL supports auto-ident - this works well when you're entering code by hand
     paste mode; Ctrl-C to cancel, Ctrl-D to finish
     ===
 
-Note: enter `help()` (when in normal mode) for a reminder of the various key bindings like `ctrl-E`.
+Note: if you need a reminder later of the various key bindings, like `ctrl-E`, just enter `help()` (when in normal mode).
 
 Now you can copy and paste in the following code and then press `ctrl-D`, the code will start to run immediately:
 
 ```
+import machine
 button = machine.Pin(0, machine.Pin.IN, machine.Pin.PULL_UP)
 prev = True
 while True:
@@ -127,7 +135,6 @@ GC: total: 111168, used: 4768, free: 106400
 
 You can see that with a WROOM module, the Python [garbage collector](https://en.wikipedia.org/wiki/Garbage_collection_(computer_science)) (GC) has considerably less space to work with.
 
-
 Example circuit
 ---------------
 
@@ -140,7 +147,7 @@ The circuit consists of:
 * A standard **5mm 20mA red LED** - its long leg (the positive anode) is on the top side of the central divide of the breadboard and is connected to pin 13 of the DevKit board, while its short leg (the negative cathode) is on the other side of the divide.
 * A **220&ohm; resister** - its legs are inserted such that one is connected with the cathode of the LED and the other to the GND pin of the DevKit board.
 
-Note: 220&ohm; is actually way higher than needed but it's a common resistor type and will keep the current well below the safe level for the pins on the board.
+Note: 220&ohm; is actually much higher than needed (meaning the LED won't be very bright) but it's a common resistor type and will keep the current well below the safe level for the pins on the board.
 
 Now lets create a simple program that flashes the LED on and off:
 
@@ -163,3 +170,10 @@ Let's copy it to the board and then connect to the MicroPython REPL:
     > repl
 
 If you now press the EN button on the board, you'll see it do a hard reset and start the program - the LED should blink on and off every 200ms.
+
+Going further
+-------------
+
+For more on using the MicroPython REPL see the [REPL section](../getting-started.md#working-with-the-repl) of my other introduction to MicroPython. There I used `screen` to connect to the REPL but, now that you know how to access the REPL using `rshell`, it's better to use `rshell` rather than `screen`.
+
+Similarly see the [documentation and tutorial section](../getting-started.md#documentation-and-tutorial) of that other introduction for pointers to more in-depth material.
