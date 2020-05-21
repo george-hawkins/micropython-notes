@@ -218,6 +218,12 @@ You can get `rshell` to run things in the REPL and then exit:
 
 Note that you have to use `~` (tilde) instead of `;` to separate statements. The first tilde is not optional but if you leave out the last tilde then `rshell` stays in the REPL rather than exiting and returning to your normal prompt.
 
+For a more dramatic but sometimes useful operation, you can completely recreate the filesystem on the device like this:
+
+    $ rshell --buffer-size 512 --quiet -p $PORT repl '~ import os ~ os.VfsFat.mkfs(bdev) ~'
+
+This will also remove `boot.py` - if you've got any special boot setup, you should copy this file and restore it after the clean-up.
+
 You can also include a sequence of `rshell` commands in a script and then get `rshell` to run this script:
 
     $ cat > myscript << EOF
