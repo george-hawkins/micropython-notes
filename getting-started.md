@@ -29,13 +29,13 @@ The firmware is flashed to your board using a tool from Espressif called [`espto
 
 If you haven't already got Python 3 installed on your local system, see my [notes](https://github.com/george-hawkins/snippets/blob/master/install-python.md) on installing it.
 
-Before you can install `esptool.py` you need to create a [Python venv](https://docs.python.org/3/tutorial/venv.html).
+Before you can install `esptool.py` you need to create a Python venv:
 
     $ python3 -m venv env
     $ source env/bin/activate
     $ pip install --upgrade pip
 
-This creates a directory called `env` in your current directory (you typically create one such environment in the base directory of any new Python related project that you start). You'll need to repeat just the `source` step in future, to activate the environment, whenever you start a new terminal session.
+Once set up, the `source` step is the only one you need to repeat - you need to use it whenever you open a new terminal session in order to activate the environment. If virtual environments are new to you, see my notes [here](https://github.com/george-hawkins/snippets/blob/master/python-venv.md).
 
 Note: many guides avoid a venv, but while venvs introduce a little extra setup, they save you a lot of trouble in the long run.
 

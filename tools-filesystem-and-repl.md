@@ -35,7 +35,7 @@ Then before you install anything Python related you should be operating in a Pyt
     $ source env/bin/activate
     $ pip install --upgrade pip
 
-The `source` step is the only one you need to repeat, if you open a new terminal and need to activate the virtual environment again. Once an environment is activated you can just use commands like `python` and `pip` rather than worrying about using specific versions like `python3` or `pip3`.
+Once set up, the `source` step is the only one you need to repeat - you need to use it whenever you open a new terminal session in order to activate the environment. If virtual environments are new to you, see my notes [here](https://github.com/george-hawkins/snippets/blob/master/python-venv.md).
 
 Serial port
 -----------

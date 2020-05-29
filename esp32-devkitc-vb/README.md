@@ -27,7 +27,7 @@ Create a new directory for your project, then create and set up a standard Pytho
     $ source env/bin/activate
     $ pip install --upgrade pip
 
-Note: you just need to repeat the `source` step, whenever you open a new terminal session, in order to activate the venv.
+Once set up, the `source` step is the only one you need to repeat - you need to use it whenever you open a new terminal session in order to activate the environment. If virtual environments are new to you, see my notes [here](https://github.com/george-hawkins/snippets/blob/master/python-venv.md).
 
 Install the Espressif [`esptool`](https://github.com/espressif/esptool):
 
