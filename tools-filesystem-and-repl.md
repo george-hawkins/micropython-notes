@@ -3,31 +3,31 @@ Working with the MicroPython filesystem and REPL
 
 **TL;DR** - my recommendation is to use `rshell` for working with the MicroPython filesystem and REPL.
 
-As seen in my [notes](getting-started.md) on setting up an ESP32 board with MicroPython, the filesystem of a newly setup board just contains a single file called `boot.py`. You generally leave this as it is and just upload the main script, called `main.py`, that you want the board to run. For more on boot scripts see this brief [guide](https://learn.adafruit.com/micropython-basics-load-files-and-run-code/boot-scripts) from Adafruit. If you need any additional modules, beyond the default ones provided, you'll also need to upload these.
+As seen in my [notes](getting-started.md) on setting up an ESP32 board with MicroPython, the filesystem of a newly set up board just contains a single file called `boot.py`. You generally leave this as it is and just upload the main script, called `main.py`, that you want the board to run. For more on boot scripts, see this brief [guide](https://learn.adafruit.com/micropython-basics-load-files-and-run-code/boot-scripts) from Adafruit. If you need any additional modules, beyond the default ones provided, you'll also need to upload these.
 
-A little surprisingly there's no clear winner when it comes to the most popular tool for transfering and managing files on MicroPython boards. There are four main contenders:
+A little surprisingly, there's no clear winner when it comes to the most popular tool for transferring and managing files on MicroPython boards. There are four main contenders:
 
 * [`pyboard.py`](https://docs.micropython.org/en/latest/reference/pyboard.py.html) - included as part of the main MicroPython distribution, this is the most basic.
 * [`ampy`](https://github.com/scientifichackers/ampy) - a slightly more sophisticated file management tool - used in all the older Adafruit MicroPython tutorials (before they created their own MicroPython derivative called [CircuitPython](https://circuitpython.readthedocs.io/en/latest/README.html)).
-* [`rshell`](https://github.com/dhylands/rshell) - supports both basic command line usage and a shell-like environment. In addition to file transfer and management, it supports the ability to interact with the MicroPython REPL.
+* [`rshell`](https://github.com/dhylands/rshell) - supports both basic command line usage and a shell-like environment. In addition, to file transfer and management, it supports the ability to interact with the MicroPython REPL.
 * [`mpfshell`](https://github.com/wendlers/mpfshell) - similar to `rshell` but with a command set more reminiscent of DOS and ftp (whereas `rshell` command set is more UNIX like).
 
-There's also [WebREPL](https://github.com/micropython/webrepl) but this requires that your board is already setup and connected to the web, i.e. you need to have used some other tool to get your board configured before you can use WebREPL. I'm not going to cover WebREPL here.
+There's also [WebREPL](https://github.com/micropython/webrepl) but this requires that your board is already set up and connected to the web, i.e. you need to have used some other tool to get your board configured before you can use WebREPL. I'm not going to cover WebREPL here.
 
-`pyboard.py` is very basic but provides the API needed to interact the MicroPython filesystem - `ampy`, `rshell` and `mpfshell` all use `pyboard.py` under the covers to do the low-level file management work for them.
+`pyboard.py` is very basic but provides the API needed to interact with the MicroPython filesystem - `ampy`, `rshell` and `mpfshell` all use `pyboard.py` under the covers to do the low-level file management work for them.
 
-Initially, I started using `ampy` as I have a lot of positive experience with Adafruit tutorials - if they recommend something, it's generally a good choice. And I liked the idea of a tool that just tried to do one thing well, i.e. file management, rather than also bundling in other things such as interacting with the REPL. However, using a tool that doesn't also support working with the REPL quickly gets tiring during development. At first I connected to the MicroPython REPL using [`screen`](https://www.gnu.org/software/screen/) and updated files using `ampy`. However, you can't transfer files while connected to the REPL - so development involves continuously quitting the REPL, transfering updated files and then restarting the REPL - not terribly convenient.
+Initially, I started using `ampy` as I have a lot of positive experience with Adafruit tutorials - if they recommend something, it's generally a good choice. And I liked the idea of a tool that just tried to do one thing well, i.e. file management, rather than also bundling in other things such as interacting with the REPL. However, using a tool that doesn't also support working with the REPL quickly gets tiring during development. At first, I connected to the MicroPython REPL using [`screen`](https://www.gnu.org/software/screen/) and updated files using `ampy`. However, you can't transfer files while connected to the REPL - so development involves continuously quitting the REPL, transferring updated files and then restarting the REPL - not terribly convenient.
 
-In the end, it's more convenient to use something like `rshell` and its shell-like environment that can manage both file related operations and working with the MicroPython REPL. I settled on `rshell` rather than `mpfshell` as I prefer its familar UNIX like feel and the way it makes your board look like its filesystem is mounted on your local system (an illusion that only goes so far).
+In the end, it's more convenient to use something like `rshell` and its shell-like environment that can manage both file-related operations and working with the MicroPython REPL. I settled on `rshell` rather than `mpfshell` as I prefer its familiar UNIX-like feel and the way it makes your board look like its filesystem is mounted on your local system (an illusion that only goes so far).
 
 Below are my notes on getting used to the various tools but, as noted above, I recommend `rshell`.
 
-Note: the development of `ampy`, `rshell` and `mpfshell` is rather moribund - all three are stable and now seem to only receive very occassional updates.
+Note: the development of `ampy`, `rshell` and `mpfshell` is rather moribund - all three are stable and now seem to only receive very occasional updates.
 
 Python
 ------
 
-The following sections all assume that you've already got Python 3 installed locally, if you don't see my notes on [installing Python](https://github.com/george-hawkins/snippets/blob/master/install-python.md).
+The following sections all assume that you've already got Python 3 installed locally. If you don't, see my notes on [installing Python](https://github.com/george-hawkins/snippets/blob/master/install-python.md).
 
 Then before you install anything Python related you should be operating in a Python venv. If you haven't set this up already, you can do it like so:
 
@@ -53,7 +53,7 @@ And on Linux, it's typically:
 pyboard.py
 ----------
 
-The MicroPython distribution provides a very basic tool called [`pyboard.py`](https://docs.micropython.org/en/latest/reference/pyboard.py.html), however it's not made available via [PyPI](https://pypi.org/) and a little hand assembly is necessary. Assuming you've already got a Python venv setup, just do:
+The MicroPython distribution provides a very basic tool called [`pyboard.py`](https://docs.micropython.org/en/latest/reference/pyboard.py.html), however, it's not made available via [PyPI](https://pypi.org/) and a little hand assembly is necessary. Assuming you've already got a Python venv setup, just do:
 
     $ pip install pyserial
     $ curl -O https://raw.githubusercontent.com/micropython/micropython/master/tools/pyboard.py
@@ -79,7 +79,7 @@ Or just:
 
 For more details see the [`pyboard.py` documentation](https://docs.micropython.org/en/latest/reference/pyboard.py.html).
 
-Note: MicroPython doesn't currently support any mechanism to interact with the filesystem other than via the REPL, so under the covers `pyboard.py` just interacts with the REPL like a human does rather than having a proper API for interacting with the filesystem. This makes things a bit hacky, e.g `ampy` issue [#64](https://github.com/scientifichackers/ampy/issues/64) shows a typical consequence of this.
+Note: MicroPython doesn't currently support any mechanism to interact with the filesystem other than via the REPL, so under the covers `pyboard.py` just interacts with the REPL as a human does rather than having a proper API for interacting with the filesystem. This makes things a bit hacky, e.g `ampy` issue [#64](https://github.com/scientifichackers/ampy/issues/64) shows a typical consequence of this.
 
 ampy
 ----
@@ -125,7 +125,7 @@ Note: if you get the error message `Could not enter raw repl` when using `ampy`,
 rshell
 ------
 
-[`rshell`](https://github.com/dhylands/rshell) is developed by Dave Hylands. Unlike `ampy` and `pyboard.py` it provides a shell like environment that includes access to the MicroPython REPL. This avoids having to continuously switch between a tool like `screen` to interact with the REPL and another tool to upload files to the board.
+[`rshell`](https://github.com/dhylands/rshell) is developed by Dave Hylands. Unlike `ampy` and `pyboard.py` it provides a shell-like environment that includes access to the MicroPython REPL. This avoids having to continuously switch between a tool like `screen` to interact with the REPL and another tool to upload files to the board.
 
 You can install it like so:
 
@@ -154,7 +154,7 @@ The important thing displayed as part of connecting is the name of your board, h
        139 Jan  1 2000  boot.py
       5253 Jan  1 2000  main.py
 
-I find this a really nice feature of `rshell`, i.e. that there isn't an idea of local and remote, instead your board's filesystem looks like it's mounted locally under `/pyboard`. This illusion only goes so far, e.g. if you do `ls /` you only see your local files, it doesn't attempt to add `pyboard` in to the list of local files.
+I find this a really nice feature of `rshell`, i.e. that there isn't an idea of local and remote, instead your board's filesystem looks like it's mounted locally under `/pyboard`. This illusion only goes so far, e.g. if you do `ls /` you only see your local files, it doesn't attempt to add `pyboard` into the list of local files.
 
 You can move around and work with files as if there were just a single filesystem. To show your local files:
 
@@ -174,7 +174,7 @@ To return to your local directory and copy `main.py` to your board:
     > ls /pyboard
     boot.py  main.py
 
-Note: when you use `ls` wihtout `-l` it doesn't behave quite like normal `ls`, it groups files by type (directories, `.py` files etc.) and sorts the filenames within these groups.
+Note: when you use `ls` without `-l` it doesn't behave quite like normal `ls`, it groups files by type (directories, `.py` files etc.) and sorts the filenames within these groups.
 
 The big additional feature of `rshell` is being able to easily work with the REPL, like so:
 
@@ -242,7 +242,7 @@ You can also include a sequence of `rshell` commands in a script and then get `r
 
 **3.** Tab completion works for filenames in various situations, e.g. when using `ls`, but does not work in others, e.g. when using the `connect` command.
 
-**4.** `rshell` does not save your command history, so if you exit and restart `rshell` you can't just search backwards for what you were doing previously.
+**4.** `rshell` does not save your command history, so if you exit and restart `rshell` you can't just search backward for what you were doing previously.
 
 **5.** Sometimes things got into a state where `rshell` would just hang at startup:
 
@@ -262,7 +262,7 @@ When I start `rshell` using `-p` it connects with a buffer size of 32:
     Using buffer-size of 32
     Connecting to /dev/ttyUSB0 (buffer-size 32)...
 
-However the `README` for `rshell` says that the default buffer size is 512. If I connect within `rshell` then it does use this buffer size:
+However, the `README` for `rshell` says that the default buffer size is 512. If I connect within `rshell` then it does use this buffer size:
 
     $ rshell
     > connect serial /dev/ttyUSB0
@@ -289,13 +289,13 @@ I always start `rshell` with both the `--buffer-size` option and the `--quiet` f
 mpfshell
 --------
 
-In the end I chose `rshell` as my main tool for interacting with MicroPython boards. [`mpfshell`](https://github.com/wendlers/mpfshell) is very similar feature-wise to `rshell` and I just looked at it briefly for comparison.
+In the end, I chose `rshell` as my main tool for interacting with MicroPython boards. [`mpfshell`](https://github.com/wendlers/mpfshell) is very similar feature-wise to `rshell` and I just looked at it briefly for comparison.
 
 To install:
 
     $ pip install mpfshell
 
-You have to leave out the `/dev` to connect to particular device:
+You have to leave out the `/dev` to connect to a particular device:
 
     $ mpfshell ttyUSB0 
     Connected to esp32

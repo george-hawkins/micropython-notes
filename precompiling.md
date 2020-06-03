@@ -13,7 +13,7 @@ Pre-compiling depends on the MicroPython [`mpy-cross`](https://github.com/microp
 
 An easier alternative is to use the version made available [via PyPi](https://pypi.org/project/mpy-cross/).
 
-Note that this version isn't made available directly by the MicroPython GitHub organization. Instead it's built by the [mpy_cross](https://gitlab.com/alelec/mpy_cross) project on GitLab that's maintained by Andrew Leech (who also contributes commits to the main MicroPython repo). His project is basically a CI setup that imports MicroPython as a submodule (which is updated weeky to point to the latest commit) and creates builds for Windows, Mac and Linux. As such, it's much simpler to use than building from source yourself.
+Note that this version isn't made available directly by the MicroPython GitHub organization. Instead, it's built by the [mpy_cross](https://gitlab.com/alelec/mpy_cross) project on GitLab that's maintained by Andrew Leech (who also contributes commits to the main MicroPython repo). His project is basically a CI setup that imports MicroPython as a submodule (which is updated weekly to point to the latest commit) and creates builds for Windows, Mac and Linux. As such, it's much simpler to use than building from source yourself.
 
 Installing
 ----------
@@ -27,7 +27,7 @@ Linking to the main executable
 
 **Update:** this section, on creating a link to `mpy-cross`, may not be relevant by the time you're reading this - I logged issue [#8](https://gitlab.com/alelec/mpy_cross/-/issues/8) and it has been addressed (but as of May 16th, 2020 a new version of mpy_cross has not yet been released on PyPI).
     
-For some reason the executable isn't automatically copied/linked to the `bin` directory of your current environment. So first find the package location and then the executable:
+For some reason, the executable isn't automatically copied/linked to the `bin` directory of your current environment. So first find the package location and then the executable:
 
     $ pip show mpy_cross
     ...

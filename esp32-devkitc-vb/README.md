@@ -33,23 +33,23 @@ Install the Espressif [`esptool`](https://github.com/espressif/esptool):
 
     $ pip install esptool
 
-Go to the MicroPython [ESP32 firmware downloads](https://micropython.org/download/esp32/), if there are firmwares listed for multiple ESP-IDF versions then go to the section for the latest version (4.x at the time of writing) and then chose the GENERIC-SPIRAM firmare in this section for the latest MicroPython version (1.12 at the time of writing).
+Go to the MicroPython [ESP32 firmware downloads](https://micropython.org/download/esp32/), if there are firmwares listed for multiple ESP-IDF versions then go to the section for the latest version (4.x at the time of writing) and then chose the GENERIC-SPIRAM firmware in this section for the latest MicroPython version (1.12 at the time of writing).
 
 There are two kinds of versions, e.g.:
 
 * GENERIC-SPIRAM : esp32spiram-idf3-20200517-unstable-v1.12-464-gcae77daf0.bin
 * GENERIC-SPIRAM : esp32spiram-idf4-20191220-v1.12.bin
 
-The one ending in `v1.12.bin` is the latest stable build, while the one ending in `v1.12-464-gcae77daf0.bin` is a nightly build and includes commits made since the last stable release (the bit after the `-g` is the hash of the revision that was built). Usually it's best to go with the latest _stable_ build.
+The one ending in `v1.12.bin` is the latest stable build, while the one ending in `v1.12-464-gcae77daf0.bin` is a nightly build and includes commits made since the last stable release (the bit after the `-g` is the hash of the revision that was built). Usually, it's best to go with the latest _stable_ build.
 
 Notes:
 
 * The plain GENERIC firmwares are for boards that just have the WROOM module while the GENERIC-SPIRAM firmwares are for boards that have the WROVER module with the addition 4MiB of SRAM.
 * ESP32 MicroPython versions are built on top of the Espressif IoT Development Framework (ESP-IDF), if you're interested in knowing more about the ESP-IDF, see my notes [here](https://github.com/george-hawkins/snippets/blob/master/esp-idf.md).
 
-Once you've downloaded the firmware, connect you board via USB and determine the serial device that corresponds to your board, typically this is `/dev/cu.SLAB_USBtoUART` on Mac and `/dev/ttyUSB0` on Linux.
+Once you've downloaded the firmware, connect your board via USB and determine the serial device that corresponds to your board, typically this is `/dev/cu.SLAB_USBtoUART` on Mac and `/dev/ttyUSB0` on Linux.
 
-Note: on Mac you will probably have to install a device driver for the CP2104 USB-to-UART bridge controller that the board uses - see [here](https://github.com/george-hawkins/snippets/blob/master/esp-usb-to-uart.md) for more details.
+Note: on Mac, you will probably have to install a device driver for the CP2104 USB-to-UART bridge controller that the board uses - see [here](https://github.com/george-hawkins/snippets/blob/master/esp-usb-to-uart.md) for more details.
 
 Now you can write the firmware to the board:
 
@@ -75,7 +75,7 @@ For more on tools like `rshell` see [here](../tools-filesystem-and-repl.md).
 Button press example
 --------------------
 
-The board has two buttons - one called **EN**, that causes the board to do a hard reset, and the other called **BOOT**, that causes the board to enter a firmware download mode if held down while you press the EN button.
+The board has two buttons - one called **EN**, which causes the board to do a hard reset, and the other called **BOOT**, which causes the board to enter a firmware download mode if held down while you press the EN button.
 
 The BOOT button only has special behavior when used in combination with EN. When the board is running, it's just a normal button connected to GPIO pin 0. So you can use it for a simple MicroPython example program.
 
@@ -109,8 +109,8 @@ Press the BOOT button and the code will print `Button pressed` (and `Button rele
 
 Notes:
 
-* The button value is `False` when the button is pressed, which is maybe the opposite to what you'd expect.
-* The code may print more often than you'd expect due to a phenomenon called [bounce](https://learn.adafruit.com/make-it-switch/debouncing) (though if you look at the [board schematic](https://dl.espressif.com/dl/schematics/esp32_devkitc_v4-sch.pdf), you'll see that the buttons have 0.1&micro;F capicitors in parallel which is a cheap mechanism for reducing bounce).
+* The button value is `False` when the button is pressed, which is maybe the opposite of what you'd expect.
+* The code may print more often than you'd expect due to a phenomenon called [bounce](https://learn.adafruit.com/make-it-switch/debouncing) (though if you look at the [board schematic](https://dl.espressif.com/dl/schematics/esp32_devkitc_v4-sch.pdf), you'll see that the buttons have 0.1&micro;F capacitors in parallel which is a cheap mechanism for reducing bounce).
 
 You can press `ctrl-C` to interrupt the running code and return to the MicroPython REPL prompt. And then press `ctrl-X` to return to the `rshell` prompt.
 
@@ -151,7 +151,7 @@ The circuit consists of:
 
 Note: 220&ohm; is actually much higher than needed (meaning the LED won't be very bright) but it's a common resistor type and will keep the current well below the safe level for the pins on the board.
 
-Now lets create a simple program that flashes the LED on and off:
+Now let's create a simple program that flashes the LED on and off:
 
     $ cat > main.py << EOF
     import machine
@@ -178,4 +178,4 @@ Going further
 
 For more on using the MicroPython REPL see the [REPL section](../getting-started.md#working-with-the-repl) of my other introduction to MicroPython. There I used `screen` to connect to the REPL but, now that you know how to access the REPL using `rshell`, it's better to use `rshell` rather than `screen`.
 
-Similarly see the [documentation and tutorial section](../getting-started.md#documentation-and-tutorial) of that other introduction for pointers to more in-depth material.
+Similarly, see the [documentation and tutorial section](../getting-started.md#documentation-and-tutorial) of that other introduction for pointers to more in-depth material.

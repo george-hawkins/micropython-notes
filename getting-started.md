@@ -14,12 +14,12 @@ The following is just a condensed form of the MicroPython ESP32 [introduction](h
 
 Go to the MicroPython [ESP32 firmware downloads](https://micropython.org/download/esp32) and select the **GENERIC** firmware for ESP-IDF v4.x, i.e. the ESP32 firmware for boards, like the HUZZAH32, that have no external SPI RAM.
 
-**Important:** I initially used the **GENERIC-SPIRAM** firmware, which is intended for boards that 4MB of external pSRAM. The Adafruit [product page](https://www.adafruit.com/product/3405) notes that the board has "4 MB of SPI Flash", however pSRAM is something different (as explained [here](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/external-ram.html#hardware)). If you use the GENERIC-SPIRAM firmware, it still works fine but you see these errors in the boot sequence:
+**Important:** I initially used the **GENERIC-SPIRAM** firmware, which is intended for boards that 4MB of external pSRAM. The Adafruit [product page](https://www.adafruit.com/product/3405) notes that the board has "4 MB of SPI Flash", however, pSRAM is something different (as explained [here](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/external-ram.html#hardware)). If you use the GENERIC-SPIRAM firmware, it still works fine but you see these errors in the boot sequence:
 
     E (593) spiram: SPI RAM enabled but initialization failed. Bailing out.
     E (10) spiram: SPI RAM not initialized
 
-I chose the latest non-nightly firmware. Nightlies have the same name as the latest stable release but with `unstable` before the version and something like `-167-gf020eac6a` after (the bit after the `-g` is the git hash of the revison that was built, i.e. `f020eac6a` in the example just given).
+I chose the latest non-nightly firmware. Nightlies have the same name as the latest stable release but with `unstable` before the version and something like `-167-gf020eac6a` after (the bit after the `-g` is the git hash of the revision that was built, i.e. `f020eac6a` in the example just given).
 
 Note: ESP32 MicroPython versions are built on top of the Espressif IoT Development Framework (ESP-IDF), if you're interested in knowing more about the ESP-IDF, see my notes [here](https://github.com/george-hawkins/snippets/blob/master/esp-idf.md).
 
@@ -47,7 +47,7 @@ Now we can install `esptool.py`:
 
 Now we're almost ready to plug in the board but before we can do that it may be necessary to install a driver for the board's USB to UART bridge - see [here](https://github.com/george-hawkins/snippets/blob/master/esp-usb-to-uart.md) for more details.
 
-Once that's done and the board is plugged in, the serial port, that corresponds to the board, needs to be determined. On Mac the port is usually `/dev/cu.SLAB_USBtoUART` and on Linux it's usually `/dev/ttyUSB0`.
+Once that's done and the board is plugged in, the serial port, that corresponds to the board, needs to be determined. On Mac, the port is usually `/dev/cu.SLAB_USBtoUART` and on Linux it's usually `/dev/ttyUSB0`.
 
 Note: when connected via USB, the yellow CHG LED on the Adafruit HUZZAH32 board flickers incessantly (if no battery is connected). This is apparently normal, see the end of the "[Battery + USB power](https://learn.adafruit.com/adafruit-huzzah32-esp32-feather?view=all#battery-plus-usb-power-4-2)" section of the Adafruit guide.
 
@@ -60,7 +60,7 @@ Now we can flash the downloaded firmware to the board:
 
 Adjust the `PORT` and `FIRMWARE` values to match the port for your system and the firmware you downloaded.
 
-Note: many examples includes the additional argument `--chip esp32`, however `esptool.py` now automatically detects the chip version.
+Note: many examples include the additional argument `--chip esp32`, however `esptool.py` now automatically detects the chip version.
 
 Working with the REPL
 ---------------------
@@ -69,7 +69,7 @@ Once uploaded you can connect to the MicroPython REPL:
 
     $ screen $PORT 115200
 
-Note: `screen` behaves differently on Mac and Linux. On Mac quiting requires pressing `ctrl-a` and then `ctrl-\`, while on Linux it requires `ctrl-a` and then just `\`.
+Note: `screen` behaves differently on Mac and Linux. On Mac quitting requires pressing `ctrl-a` and then `ctrl-\`, while on Linux it requires `ctrl-a` and then just `\`.
 
 Just press return to get a prompt and then enter `help()`:
 
@@ -148,9 +148,9 @@ Note: a lot of the modules have names like `uos`, `uio` etc., i.e. names that st
 Paste mode
 ----------
 
-The REPL supports auto-indent which is useful when entering larger pieces of code, however if you're copying and pasting in an already properly indented piece of code, the auto-indent feature will end up over indenting everything. To deal with this you need to use the REPL's [paste mode](http://docs.micropython.org/en/latest/esp8266/tutorial/repl.html#paste-mode) - just press `ctrl-E` to enter paste mode, then paste in the required text and press `ctrl-D` to exit paste mode.
+The REPL supports auto-indent which is useful when entering larger pieces of code, however, if you're copying and pasting in an already properly indented piece of code, the auto-indent feature will end up over indenting everything. To deal with this you need to use the REPL's [paste mode](http://docs.micropython.org/en/latest/esp8266/tutorial/repl.html#paste-mode) - just press `ctrl-E` to enter paste mode, then paste in the required text and press `ctrl-D` to exit paste mode.
 
-Turning an LED of and off
+Turning an LED on and off
 -------------------------
 
 Once you've had a look around, try turning on the red LED that's next to the USB port on the HUZZAH32 board and connected to GPIO #13:
@@ -175,4 +175,4 @@ Documentation and tutorial
 
 You can find the documentation for the standard libraries and the MicroPython-specific libraries [here](https://docs.micropython.org/en/latest/library/index.html#python-standard-libraries-and-micro-libraries).
 
-Once you're ready, you can work through the MicroPython tutorial for the [ESP8266](https://docs.micropython.org/en/latest/esp8266/tutorial/repl.html) (there's no separate version for the ESP32 and the two are identical for things covered here). And after that you can return to the ESP32 specific [quick reference](http://docs.micropython.org/en/latest/esp32/quickref.html).
+Once you're ready, you can work through the MicroPython tutorial for the [ESP8266](https://docs.micropython.org/en/latest/esp8266/tutorial/repl.html) (there's no separate version for the ESP32 and the two are identical for things covered here). And after that, you can return to the ESP32 specific [quick reference](http://docs.micropython.org/en/latest/esp32/quickref.html).
